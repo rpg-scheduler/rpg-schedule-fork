@@ -17,6 +17,11 @@ import rssRoutes from "./routes/rss";
 
 const app = express();
 
+process.on('unhandledRejection', function(err) {
+  console.log("unhandled rejection:");
+  console.log(err);
+});
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(express.static(path.join(__dirname, "..", "public")));

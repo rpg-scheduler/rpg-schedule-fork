@@ -1,4 +1,4 @@
-import { TextChannel, Client, Message, User, GuildChannel, MessageEmbed, Permissions, Guild, DMChannel, NewsChannel } from "discord.js";
+import { TextChannel, Client, Message, User, GuildChannel, MessageEmbed, Permissions, Guild, DMChannel, NewsChannel, Intents } from "discord.js";
 import { DeleteWriteOpResultObject, FilterQuery, ObjectId, UpdateWriteOpResult } from "mongodb";
 
 import { GuildConfig, GuildConfigModel, ConfigRole } from "../models/guild-config";
@@ -26,7 +26,12 @@ app.locals.langs = app.locals.supportedLanguages.langs
   })
   .sort((a: any, b: any) => (a.name > b.name ? 1 : -1));
 
-let client = new Client({ fetchAllMembers: true });
+const intents = new Intents([
+      Intents.NON_PRIVILEGED, // include all non-privileged intents, would be better to specify which ones you actually need
+          "GUILD_MEMBERS", // lets you request guild members (i.e. fixes the issue)
+]);
+
+let client = new Client({ ws: {intents}, fetchAllMembers: true });
 let isReady = false;
 let connected = false;
 let numSlices = client.shard.count * 2;
